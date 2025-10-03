@@ -1,22 +1,12 @@
-
 async function fetchLatest() {
-  try {
-    const r = await fetch('/.netlify/functions/latest', { cache: 'no-store' });
-    const json = await r.json(); // { temperature, humidity, timeISO }
-    document.getElementById('temp').textContent = 
-      (typeof json.temperature === 'number') ? json.temperature.toFixed(1) : '--';
-    document.getElementById('hum').textContent  = 
-      (typeof json.humidity === 'number') ? json.humidity.toFixed(1) : '--';
-    document.getElementById('time').textContent = 
-      json.timeISO ? new Date(json.timeISO).toLocaleString() : '--';
-  } catch (e) {
-    document.getElementById('temp').textContent = '--';
-    document.getElementById('hum').textContent  = '--';
-    document.getElementById('time').textContent = 'Error';
-  }
+  const r = await fetch('/.netlify/functions/latest?ts=' + Date.now(), { cache: 'no-store' });
+  const json = await r.json();
+  document.getElementById('temp').textContent = (typeof json.temperature === 'number') ? json.temperature : '--';
+  document.getElementById('hum').textContent  = (typeof json.humidity === 'number') ? json.humidity  : '--';
+  document.getElementById('time').textContent = json.timeISO ? new Date(json.timeISO).toLocaleString() : '--';
 }
-// botón manual + actualización periódica
 document.getElementById('refresh').addEventListener('click', fetchLatest);
 fetchLatest();
-setInterval(fetchLatest, 5000);
+// 15 segundos (<= 4 llamadas/min)
+setInterval(fetchLatest, 15000););
  
