@@ -1,16 +1,16 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Estation SMA</title>
 </head>
 <body>
-  <h1>Estation météo</h1>
-  <div><strong>Temperature actuel:</strong> <span id="temp">--</span> °C</div>
-  <canvas id="chart" height="120"></canvas>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <h1>Estation météo — SMA</h1>
+  <p><strong>Temperature actuel:</strong> <span id="temp">--</span> °C</p>
+  <p><strong>Humidité actuel:</strong> <span id="hum">--</span> %</p>
+  <p style="font-size:0.9;color:#666"><em>Heur:</em> <span id="time">--</span></p>
+  <button id="refresh">Refrechir</button>
   <script src="script.js"></script>
 </body>
 </html>
