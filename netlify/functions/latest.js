@@ -7,7 +7,7 @@ module.exports.handler = async function () {
     return { statusCode: 500, body: JSON.stringify({ error: "Falta TTS_APP o TTS_KEY" }) };
   }
   try {
-    const url = `${BASE}/api/v3/as/applications/${encodeURIComponent(APP)}/packages/storage/messages?limit=1&order=desc`;
+    const url = `${BASE}/api/v3/as/applications/${encodeURIComponent(APP)}/packages/storage/messages?limit=1&order=received_at`;
     const res = await fetch(url, { headers: { Authorization: `Bearer ${KEY}` } });
     const data = await res.json();
     if (!res.ok) throw new Error(JSON.stringify(data));
