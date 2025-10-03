@@ -7,15 +7,20 @@ exports.handler = async function () {
     return { statusCode: 500, body: JSON.stringify({ error: 'Missing TTS_APP or TTS_KEY' }) };
   }
   try {
-    // SIN "type=" a propósito
+    // SOLO limit=1, sin order, sin type
     const url = `${BASE}/api/v3/as/applications/${encodeURIComponent(APP)}` +
-                `/packages/storage/messages?limit=1&order=-received_at`;
+                `/packages/storage/messages?limit=1`;
     const res  = await fetch(url, { headers: { Authorization: `Bearer ${KEY}`, Accept: 'application/json' } });
     const data = await res.json();
-    if (!res.ok) return { statusCode: res.status, body: JSON.stringify({ error: data, debugUrl: url }) };
+    if (!res.ok) {
+      return { statusCode: res.status, body: JSON.stringify({ error: data, debugUrl: url }) };
+    }
     const item = Array.isArray(data) ? data[0] : (data.result?.[0] ?? data);
-    const up   = item?.result?.uplink_message ?? item?.uplink_message ?? item;
-    const dec  = up?.decoded_payload?.fields ?? up?.decoded_payload ?? {};
+    if (!item) {
+      return { statusCode: 204, body: JSON.stringify({ error: 'No messages in Storage', debugUrl: url }) };
+    }
+    const up  = item?.result?.uplink_message ?? item?.uplink_message ?? item;
+    const dec = up?.decoded_payload?.fields ?? up?.decoded_payload ?? {};
     const toNum = v => (v != null && !Number.isNaN(Number(v))) ? Number(v) : null;
     const temperature = toNum(dec.temperature);
     const humidity    = toNum(dec.humidity);
